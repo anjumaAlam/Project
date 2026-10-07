@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoodSpace</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Set the theme immediately so the page never flashes the wrong colors -->
+  <script>
+    document.body.className = "theme-" + new URLSearchParams(location.search).get("mood");
+  </script>
+
+  <a class="back-link" href="index.html">← Choose another mood</a>
+
+  <div class="stage">
+
+    <!-- The mood card. Starts hidden; script.js fills it in and fades it in. -->
+    <main class="mood-card hidden" id="card">
+      <div class="mood-emoji"></div>
+
+      <!-- Quote slider: quote + progress bar + controls -->
+      <div class="quote-box">
+        <blockquote class="mood-quote"></blockquote>
+        <p class="mood-author"></p>
+      </div>
+      <div class="progress"><span id="progress-bar"></span></div>
+      <div class="quote-controls">
+        <button class="ctrl" id="prev" aria-label="Previous quote">‹</button>
+        <div class="dots" id="dots"></div>
+        <button class="ctrl" id="next" aria-label="Next quote">›</button>
+        <button class="ctrl" id="pause" aria-label="Pause quotes">⏸</button>
+      </div>
+
+      <p class="mood-message"></p>
+      <button class="new-quote" id="activity-btn"></button>
+    </main>
+
+    <!-- A small step-by-step activity (hidden until the button is pressed) -->
+    <section class="activity" id="activity" hidden>
+      <div class="breath" id="breath" hidden></div>
+      <p class="activity-text" id="activity-text"></p>
+      <button class="new-quote" id="activity-next">Next</button>
+    </section>
+
+    <!-- A gentle note, shown only on Sad and Anxious pages -->
+    <p class="care-note" id="care-note" hidden>
+      If you've felt this way for many days, please talk to someone you trust or a professional.
+      In Bangladesh, Kaan Pete Roi is an emotional support helpline:
+      <a href="tel:09612119911">09612-119911</a> (3pm–3am daily; check kaanpeteroi.org for current hours).
+      In an emergency, call 999.
+    </p>
+
+  </div>
+
+  <div class="animation-layer"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

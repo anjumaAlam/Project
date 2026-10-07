@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoodSpace</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="home">
+
+  <!-- Soft glowing blobs drifting in the background -->
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+
+  <header class="hero">
+    <p class="eyebrow">a little space for your feelings</p>
+    <h1>MoodSpace</h1>
+    <p class="tagline">How are you feeling today?</p>
+  </header>
+
+  <!-- One tile per mood. Each link opens mood.html with that mood. -->
+  <nav class="mood-grid">
+    <a class="tile tile-happy" href="mood.html?mood=happy">
+      <span class="tile-emoji">🌻</span>
+      <span class="tile-name">Happy</span>
+      <span class="tile-desc">Sunshine &amp; smiles</span>
+    </a>
+    <a class="tile tile-excited" href="mood.html?mood=excited">
+      <span class="tile-emoji">🎉</span>
+      <span class="tile-name">Excited</span>
+      <span class="tile-desc">Let's celebrate</span>
+    </a>
+    <a class="tile tile-calm" href="mood.html?mood=calm">
+      <span class="tile-emoji">🌿</span>
+      <span class="tile-name">Calm</span>
+      <span class="tile-desc">Slow &amp; peaceful</span>
+    </a>
+    <a class="tile tile-romantic" href="mood.html?mood=romantic">
+      <span class="tile-emoji">💕</span>
+      <span class="tile-name">Romantic</span>
+      <span class="tile-desc">Warm &amp; dreamy</span>
+    </a>
+    <a class="tile tile-sad" href="mood.html?mood=sad">
+      <span class="tile-emoji">🌧️</span>
+      <span class="tile-name">Sad</span>
+      <span class="tile-desc">Soft, quiet rain</span>
+    </a>
+    <a class="tile tile-anxious" href="mood.html?mood=anxious">
+      <span class="tile-emoji">🫧</span>
+      <span class="tile-name">Anxious</span>
+      <span class="tile-desc">Breathe with me</span>
+    </a>
+    <a class="tile tile-tired" href="mood.html?mood=tired">
+      <span class="tile-emoji">🌙</span>
+      <span class="tile-name">Tired</span>
+      <span class="tile-desc">Time to rest</span>
+    </a>
+    <a class="tile tile-angry" href="mood.html?mood=angry">
+      <span class="tile-emoji">🔥</span>
+      <span class="tile-name">Angry</span>
+      <span class="tile-desc">Let it cool down</span>
+    </a>
+  </nav>
+
+  <p class="home-note">Tap a mood to step into its world ✨</p>
+
+</body>
+</html>

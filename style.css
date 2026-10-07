@@ -1,0 +1,936 @@
+/* ==========================================
+   MoodSpace - style.css (Step 2: base styling)
+   ========================================== */
+
+/* Fonts: Nunito for the UI, Playfair Display for quotes */
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Playfair+Display:ital@0;1&display=swap");
+
+/* ------------------------------------------
+   0. ANIMATABLE VARIABLES
+   Normally CSS can't smoothly fade a gradient.
+   @property tells the browser "these variables are colors",
+   so it can blend from one color to another.
+   ------------------------------------------ */
+@property --bg-start { syntax: "<color>"; inherits: true; initial-value: #c9d6ff; }
+@property --bg-end   { syntax: "<color>"; inherits: true; initial-value: #e2e2e2; }
+@property --text     { syntax: "<color>"; inherits: true; initial-value: #2d3047; }
+@property --accent   { syntax: "<color>"; inherits: true; initial-value: #7b8cde; }
+@property --card-bg  { syntax: "<color>"; inherits: true; initial-value: rgba(255, 255, 255, 0.35); }
+
+/* ------------------------------------------
+   1. THEME VARIABLES
+   These are the "knobs" of the whole page.
+   In Step 4, each mood will just change these values.
+   ------------------------------------------ */
+:root {
+  --bg-start: #c9d6ff;   /* gradient top color */
+  --bg-end: #e2e2e2;     /* gradient bottom color */
+  --text: #2d3047;       /* main text color */
+  --accent: #7b8cde;     /* buttons and highlights */
+  --card-bg: rgba(255, 255, 255, 0.35); /* see-through white for the glass card */
+}
+
+/* ------------------------------------------
+   2. BASIC RESET AND PAGE
+   ------------------------------------------ */
+* {
+  box-sizing: border-box; /* makes sizing easier to predict */
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  font-family: "Nunito", sans-serif;
+  color: var(--text);
+  background: linear-gradient(160deg, var(--bg-start), var(--bg-end));
+  display: flex;
+  flex-direction: column;   /* stack things top to bottom */
+  align-items: center;      /* center them horizontally */
+  padding: 3rem 1.25rem;
+  gap: 2rem;
+  /* This makes the theme change smooth instead of sudden */
+  transition: --bg-start 0.8s ease, --bg-end 0.8s ease,
+              --text 0.8s ease, --accent 0.8s ease, --card-bg 0.8s ease;
+}
+
+/* Keep real content above the animation layer */
+header, nav, main {
+  position: relative;
+  z-index: 1;
+}
+
+/* ------------------------------------------
+   3. HEADER
+   ------------------------------------------ */
+header {
+  text-align: center;
+}
+
+h1 {
+  font-size: clamp(2.2rem, 6vw, 3.2rem); /* grows/shrinks with screen size */
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.tagline {
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  opacity: 0.75;
+}
+
+/* ------------------------------------------
+   4. MOOD BUTTONS
+   ------------------------------------------ */
+.mood-buttons {
+  display: flex;
+  flex-wrap: wrap;          /* buttons move to the next line on small screens */
+  justify-content: center;
+  gap: 0.75rem;
+  max-width: 600px;
+}
+
+.mood-buttons button {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--card-bg);
+  border: 2px solid transparent;
+  border-radius: 999px;     /* a huge radius = pill shape */
+  padding: 0.7rem 1.4rem;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, border-color 0.3s ease, background 0.3s ease;
+}
+
+.mood-buttons button:hover {
+  transform: translateY(-3px);  /* lifts up a little */
+  border-color: var(--accent);
+}
+
+/* JavaScript will add the "active" class to the selected button (Step 3) */
+.mood-buttons button.active {
+  background: var(--accent);
+  color: white;
+}
+
+/* ------------------------------------------
+   5. MOOD CARD (the frosted glass effect)
+   ------------------------------------------ */
+.mood-card {
+  width: 100%;
+  max-width: 520px;
+  text-align: center;
+  padding: 2.5rem 2rem;
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);              /* blurs what's behind the card */
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 28px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+}
+
+.mood-emoji {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.mood-quote {
+  font-family: "Playfair Display", serif;
+  font-style: italic;
+  font-size: 1.4rem;
+  line-height: 1.5;
+}
+
+.mood-author {
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
+  opacity: 0.7;
+}
+
+.mood-message {
+  margin-top: 1.5rem;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+/* ------------------------------------------
+   6. ANIMATION LAYER (empty for now)
+   It sits behind everything and covers the whole screen.
+   ------------------------------------------ */
+.animation-layer {
+  position: fixed;
+  inset: 0;                 /* top, right, bottom, left = 0 */
+  z-index: 0;
+  pointer-events: none;     /* clicks pass through it */
+  overflow: hidden;
+}
+
+/* ------------------------------------------
+   7. CARD SWAP EFFECT AND "ANOTHER QUOTE" BUTTON
+   ------------------------------------------ */
+.mood-card {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* JavaScript adds "hidden" for a moment while the text changes */
+.mood-card.hidden {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+/* Don't show an empty author line */
+.mood-author:empty {
+  display: none;
+}
+
+.new-quote {
+  margin-top: 1.5rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  background: transparent;
+  border: 2px solid var(--accent);
+  border-radius: 999px;
+  padding: 0.5rem 1.2rem;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.new-quote:hover {
+  background: var(--accent);
+  color: white;
+}
+
+/* ------------------------------------------
+   8. MOOD THEMES
+   JavaScript puts a class like "theme-happy" on <body>.
+   Each theme only changes the variables from section 1.
+   To make a new mood: copy one block and change the colors.
+   ------------------------------------------ */
+body.theme-happy {
+  --bg-start: #fff3b0;
+  --bg-end: #ffb347;
+  --text: #5a3a00;
+  --accent: #ff9f1c;
+  --card-bg: rgba(255, 255, 255, 0.45);
+}
+
+body.theme-sad {
+  --bg-start: #1b2a49;
+  --bg-end: #3d5a80;
+  --text: #e6eefc;
+  --accent: #6c8ebf;
+  --card-bg: rgba(255, 255, 255, 0.12);
+}
+
+/* Warm red, but soft and deep so it feels calming, not aggressive */
+body.theme-angry {
+  --bg-start: #3b1218;
+  --bg-end: #b5523b;
+  --text: #fff1ea;
+  --accent: #ff8a65;
+  --card-bg: rgba(255, 255, 255, 0.14);
+}
+
+body.theme-tired {
+  --bg-start: #141432;
+  --bg-end: #2e2a5e;
+  --text: #dcd9f5;
+  --accent: #9d8fe0;
+  --card-bg: rgba(255, 255, 255, 0.1);
+}
+
+body.theme-romantic {
+  --bg-start: #ffd6e0;
+  --bg-end: #ff8fab;
+  --text: #5c1f33;
+  --accent: #e5567a;
+  --card-bg: rgba(255, 255, 255, 0.4);
+}
+
+/* Respect people who turn off motion in their device settings */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ------------------------------------------
+   9. MOOD ANIMATIONS
+   JavaScript creates the particles. These rules decide how they move.
+   ------------------------------------------ */
+.particle {
+  position: absolute;
+  user-select: none;
+  opacity: 0;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* Happy and Romantic: drift upward with a little sway */
+.float-up {
+  bottom: -10vh;
+  animation-name: floatUp;
+}
+
+@keyframes floatUp {
+  0%   { transform: translateY(0) translateX(0); opacity: 0; }
+  10%  { opacity: 0.85; }
+  50%  { transform: translateY(-60vh) translateX(25px); }
+  100% { transform: translateY(-120vh) translateX(-15px); opacity: 0; }
+}
+
+/* Sad: gentle rain falling down */
+.fall {
+  top: -10vh;
+  animation-name: fall;
+}
+
+@keyframes fall {
+  0%   { transform: translateY(0); opacity: 0; }
+  10%  { opacity: 0.6; }
+  100% { transform: translateY(120vh); opacity: 0; }
+}
+
+/* Tired: stars that slowly twinkle in place */
+.twinkle {
+  animation-name: twinkle;
+  animation-timing-function: ease-in-out;
+  animation-direction: alternate;
+}
+
+@keyframes twinkle {
+  from { opacity: 0.15; transform: scale(0.8); }
+  to   { opacity: 1;    transform: scale(1.2); }
+}
+
+/* Angry: big soft rings that expand and fade, like slow breathing */
+.ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70vmin;
+  height: 70vmin;
+  margin: -35vmin 0 0 -35vmin;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  opacity: 0;
+  animation-name: breathe;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
+
+@keyframes breathe {
+  0%   { transform: scale(0.4); opacity: 0; }
+  50%  { opacity: 0.5; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* For people who prefer no motion: hide the moving background */
+@media (prefers-reduced-motion: reduce) {
+  .animation-layer {
+    display: none;
+  }
+}
+
+/* ------------------------------------------
+   10. MULTI-PAGE ADDITIONS
+   ------------------------------------------ */
+
+/* Mood links on the home page (same look as the old buttons) */
+.mood-buttons a {
+  display: inline-block;
+  text-decoration: none;
+  font-weight: 600;
+  color: var(--text);
+  background: var(--card-bg);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  padding: 0.7rem 1.4rem;
+  backdrop-filter: blur(10px);
+  transition: transform 0.2s ease, border-color 0.3s ease;
+}
+
+.mood-buttons a:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+}
+
+/* Back link on the mood pages */
+.back-link {
+  position: relative;
+  z-index: 1;
+  align-self: flex-start;
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 600;
+  opacity: 0.8;
+}
+
+.back-link:hover {
+  opacity: 1;
+}
+
+/* Mood pages: center the card in the screen */
+body > .mood-card {
+  margin: auto;
+}
+
+/* Soft fade-in when any page opens */
+@keyframes pageIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+body {
+  animation: pageIn 0.8s ease;
+}
+
+/* Sad: thin rain streaks instead of emoji */
+.rain {
+  top: -10vh;
+  width: 2px;
+  height: 60px;
+  background: linear-gradient(transparent, rgba(190, 215, 255, 0.7));
+  animation-name: fall;
+}
+
+/* ==========================================
+   11. HOME PAGE
+   ========================================== */
+body.home {
+  --bg-start: #e9defa;
+  --bg-end: #ffe3ec;
+  --text: #3b3556;
+  --accent: #9b87f5;
+  overflow-x: hidden;
+}
+
+.hero {
+  text-align: center;
+  margin-top: 2vh;
+}
+
+.eyebrow {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  opacity: 0.6;
+  margin-bottom: 0.6rem;
+}
+
+/* Gradient text */
+.home h1 {
+  font-size: clamp(2.8rem, 10vw, 4.8rem);
+  background: linear-gradient(90deg, #7b6cf6, #f27ab0, #ffb347);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* The grid of mood tiles */
+.mood-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  width: 100%;
+  max-width: 740px;
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 1.8rem 1rem;
+  border-radius: 26px;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: tileIn 0.7s ease both;   /* slide up when the page opens */
+}
+
+.tile:hover {
+  transform: translateY(-8px) scale(1.03);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
+}
+
+.tile-emoji {
+  font-size: 2.8rem;
+  transition: transform 0.3s ease;
+}
+
+.tile:hover .tile-emoji {
+  transform: scale(1.2) rotate(-6deg);
+}
+
+.tile-name {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.tile-desc {
+  font-size: 0.85rem;
+  opacity: 0.8;
+}
+
+/* Each tile wears its own mood colors */
+.tile-happy    { background: linear-gradient(160deg, #fff3b0, #ffb347); color: #5a3a00; }
+.tile-sad      { background: linear-gradient(160deg, #1b2a49, #3d5a80); color: #e6eefc; }
+.tile-angry    { background: linear-gradient(160deg, #3b1218, #b5523b); color: #fff1ea; }
+.tile-tired    { background: linear-gradient(160deg, #141432, #2e2a5e); color: #dcd9f5; }
+.tile-romantic { background: linear-gradient(160deg, #ffd6e0, #ff8fab); color: #5c1f33; }
+
+/* Tiles appear one after another */
+.tile:nth-child(1) { animation-delay: 0.1s; }
+.tile:nth-child(2) { animation-delay: 0.2s; }
+.tile:nth-child(3) { animation-delay: 0.3s; }
+.tile:nth-child(4) { animation-delay: 0.4s; }
+.tile:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes tileIn {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.home-note {
+  position: relative;
+  z-index: 1;
+  font-size: 0.95rem;
+  opacity: 0.6;
+}
+
+/* Blurry glowing blobs behind everything */
+.blob {
+  position: fixed;
+  z-index: 0;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.55;
+  animation: blobDrift 18s ease-in-out infinite alternate;
+}
+
+.blob1 { width: 340px; height: 340px; background: #b9a7ff; top: -80px;  left: -60px; }
+.blob2 { width: 300px; height: 300px; background: #ffb3c8; bottom: -60px; right: -40px; animation-delay: -6s; }
+.blob3 { width: 240px; height: 240px; background: #ffe0a3; top: 45%; left: 55%; animation-delay: -12s; }
+
+@keyframes blobDrift {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(60px, 40px) scale(1.15); }
+}
+
+/* ==========================================
+   12. MOOD PAGE EXTRAS (for all moods)
+   ========================================== */
+
+/* The big emoji slowly floats up and down */
+.mood-emoji {
+  animation: bob 4s ease-in-out infinite;
+}
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+
+/* ==========================================
+   13. SAD PAGE DECORATION
+   ========================================== */
+
+/* Cloudy, quiet glass card */
+body.theme-sad .mood-card {
+  border-color: rgba(160, 190, 255, 0.25);
+  box-shadow: 0 10px 50px rgba(10, 25, 60, 0.55);
+}
+
+/* Drifting clouds (made by script.js) */
+.cloud {
+  position: absolute;
+  left: 0;
+  width: 190px;
+  height: 56px;
+  background: #cfdcf7;
+  border-radius: 56px;
+  opacity: 0.16;          /* opacity on the whole cloud = no ugly overlaps */
+  filter: blur(3px);
+  animation: drift linear infinite;
+}
+
+.cloud::before,
+.cloud::after {
+  content: "";
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+}
+
+.cloud::before { width: 85px; height: 85px; top: -40px; left: 28px; }
+.cloud::after  { width: 62px; height: 62px; top: -26px; left: 98px; }
+
+@keyframes drift {
+  from { transform: translateX(-300px); }
+  to   { transform: translateX(calc(100vw + 300px)); }
+}
+
+/* No motion for people who turned it off */
+@media (prefers-reduced-motion: reduce) {
+  .blob { display: none; }
+  .mood-emoji { animation: none; }
+}
+
+/* ==========================================
+   14. THREE NEW MOODS (themes + home tiles)
+   ========================================== */
+body.theme-calm {
+  --bg-start: #d8f3dc;
+  --bg-end: #8fcfae;
+  --text: #1b4332;
+  --accent: #40916c;
+  --card-bg: rgba(255, 255, 255, 0.4);
+}
+
+body.theme-excited {
+  --bg-start: #7b2ff7;
+  --bg-end: #f107a3;
+  --text: #ffffff;
+  --accent: #ffd60a;
+  --card-bg: rgba(255, 255, 255, 0.2);
+}
+
+body.theme-anxious {
+  --bg-start: #dff3f0;
+  --bg-end: #b3c3ee;
+  --text: #2b3a55;
+  --accent: #6f8fd6;
+  --card-bg: rgba(255, 255, 255, 0.4);
+}
+
+.tile-calm    { background: linear-gradient(160deg, #d8f3dc, #8fcfae); color: #1b4332; }
+.tile-excited { background: linear-gradient(160deg, #7b2ff7, #f107a3); color: #ffffff; }
+.tile-anxious { background: linear-gradient(160deg, #dff3f0, #b3c3ee); color: #2b3a55; }
+
+/* 8 tiles = a neat 4 x 2 grid (2 per row on phones) */
+.mood-grid {
+  grid-template-columns: repeat(4, 1fr);
+  max-width: 820px;
+}
+
+@media (max-width: 640px) {
+  .mood-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.tile:nth-child(6) { animation-delay: 0.6s; }
+.tile:nth-child(7) { animation-delay: 0.7s; }
+.tile:nth-child(8) { animation-delay: 0.8s; }
+
+/* ==========================================
+   15. MOOD PAGE DECORATIONS
+   ========================================== */
+
+/* HAPPY: a warm glowing sun in the corner */
+.sun {
+  position: absolute;
+  top: -110px;
+  right: -110px;
+  width: 360px;
+  height: 360px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fffbe0 0%, rgba(255, 214, 102, 0.75) 35%, transparent 70%);
+  animation: sunPulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes sunPulse {
+  from { transform: scale(1);    opacity: 0.8; }
+  to   { transform: scale(1.12); opacity: 1; }
+}
+
+/* TIRED: a glowing crescent moon (box-shadow trick makes the crescent) */
+.moon {
+  position: absolute;
+  top: 9vh;
+  right: 12vw;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  box-shadow: -24px 14px 0 0 #f4efcf;
+  filter: drop-shadow(0 0 18px rgba(244, 239, 207, 0.6));
+  animation: moonFloat 9s ease-in-out infinite alternate;
+}
+
+@keyframes moonFloat {
+  from { transform: translateY(0); }
+  to   { transform: translateY(14px); }
+}
+
+/* ANGRY: a warm glow at the bottom and rising embers */
+.glow {
+  position: absolute;
+  bottom: -20vh;
+  left: 50%;
+  width: 140vw;
+  height: 60vh;
+  margin-left: -70vw;
+  background: radial-gradient(ellipse at center bottom, rgba(255, 120, 60, 0.45), transparent 65%);
+  animation: glowPulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes glowPulse {
+  from { opacity: 0.6; }
+  to   { opacity: 1; }
+}
+
+.ember {
+  border-radius: 50%;
+  background: #ffb347;
+  box-shadow: 0 0 8px #ff7b3a;
+}
+
+/* ROMANTIC: soft blurry pink lights */
+.bokeh {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  filter: blur(6px);
+  animation: bokehFloat ease-in-out infinite alternate;
+}
+
+@keyframes bokehFloat {
+  from { transform: translate(0, 0) scale(1);       opacity: 0.25; }
+  to   { transform: translate(30px, -40px) scale(1.2); opacity: 0.6; }
+}
+
+/* CALM: leaves drifting down slowly */
+.leaf {
+  top: -10vh;
+  animation-name: leafFall;
+}
+
+@keyframes leafFall {
+  0%   { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.85; }
+  50%  { transform: translate(60px, 55vh) rotate(180deg); }
+  100% { transform: translate(-30px, 120vh) rotate(360deg); opacity: 0; }
+}
+
+/* EXCITED: confetti */
+.confetti {
+  top: -5vh;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  animation-name: confettiFall;
+}
+
+@keyframes confettiFall {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+  8%   { opacity: 0.95; }
+  100% { transform: translateY(115vh) rotate(720deg); opacity: 0.9; }
+}
+
+/* ANXIOUS: calm bubbles floating up (plus breathing rings from section 9) */
+.bubble {
+  bottom: -10vh;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), transparent 60%);
+  animation-name: floatUp;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sun, .moon, .glow, .bokeh { animation: none; }
+}
+
+/* ==========================================
+   16. LAYOUT, QUOTE SLIDER, ACTIVITIES
+   ========================================== */
+[hidden] { display: none !important; }
+
+/* Holds the card, the activity and the care note, centered on the page */
+.stage {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 520px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Fixed height so the card doesn't jump when quotes have different lengths */
+.quote-box {
+  min-height: 8.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.mood-quote {
+  transition: opacity 0.4s ease;
+}
+
+.mood-quote.fading {
+  opacity: 0;
+}
+
+/* Thin bar that fills up until the next quote */
+.progress {
+  height: 3px;
+  max-width: 220px;
+  margin: 1rem auto 0;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+#progress-bar {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: var(--accent);
+}
+
+@keyframes fill {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+.quote-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 0.9rem;
+}
+
+.ctrl {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent);
+  background: transparent;
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.ctrl:hover {
+  background: var(--accent);
+  color: white;
+}
+
+.dots {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+  background: var(--text);
+  opacity: 0.25;
+  cursor: pointer;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.dot.active {
+  opacity: 0.9;
+  transform: scale(1.4);
+  background: var(--accent);
+}
+
+/* Activity panel (same frosted-glass look as the card) */
+.activity {
+  text-align: center;
+  padding: 1.8rem 1.5rem;
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+  animation: pageIn 0.6s ease;
+}
+
+.activity-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  min-height: 3.2rem;
+}
+
+.new-quote:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* The breathing circle grows while you breathe in, shrinks while you breathe out */
+.breath {
+  width: 100px;
+  height: 100px;
+  margin: 0.8rem auto 1.6rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff, var(--accent));
+  opacity: 0.85;
+  transition: transform 4s ease-in-out;
+}
+
+.care-note {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  text-align: center;
+  opacity: 0.75;
+}
+
+.care-note a {
+  color: var(--text);
+}
+
+/* ==========================================
+   17. SAD "EASE THE MOOD": night turns to dawn
+   ========================================== */
+.dawn {
+  position: absolute;
+  bottom: -30vh;
+  left: 50%;
+  width: 140vw;
+  height: 75vh;
+  margin-left: -70vw;
+  background: radial-gradient(ellipse at center bottom, rgba(255, 214, 150, 0.85), transparent 65%);
+  opacity: 0;
+  transition: opacity 40s linear;
+}
+
+body.easing .dawn {
+  opacity: 1;
+}
+
+body.easing .cloud {
+  opacity: 0;
+  transition: opacity 50s linear;
+}
+
+body.theme-sad.easing {
+  --bg-start: #6f93c4;
+  --bg-end: #f3cfa5;
+  --text: #1f2b45;
+  --accent: #e8955a;
+  --card-bg: rgba(255, 255, 255, 0.35);
+  transition: --bg-start 60s linear, --bg-end 60s linear,
+              --text 60s linear, --accent 60s linear, --card-bg 60s linear;
+}
+
+/* The progress bar must keep its real speed even if "reduce motion" is on,
+   because it also decides when the next quote appears. */
+@media (prefers-reduced-motion: reduce) {
+  #progress-bar {
+    animation-duration: var(--quote-seconds, 30s) !important;
+  }
+}
