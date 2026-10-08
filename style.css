@@ -934,3 +934,105 @@ body.theme-sad.easing {
     animation-duration: var(--quote-seconds, 30s) !important;
   }
 }
+
+/* ==========================================
+   18. SUGGESTION PAGE
+   ========================================== */
+.suggest-link {
+  position: relative;
+  z-index: 1;
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 2px solid var(--accent);
+  padding-bottom: 2px;
+  opacity: 0.85;
+}
+
+.suggest-link:hover {
+  opacity: 1;
+}
+
+.suggest-card {
+  text-align: left;
+}
+
+.suggest-card h2,
+.suggest-card .mood-emoji,
+.suggest-intro {
+  text-align: center;
+}
+
+.suggest-card h2 {
+  font-size: 1.5rem;
+}
+
+.suggest-intro {
+  margin: 0.6rem 0 1.5rem;
+  line-height: 1.6;
+  opacity: 0.85;
+}
+
+.suggest-card label {
+  display: block;
+  margin: 1rem 0 0.35rem;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.optional {
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+.suggest-card select,
+.suggest-card textarea,
+.suggest-card input[type="email"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-family: inherit;
+  font-size: 1rem;
+  color: #3b3556;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1.5px solid rgba(0, 0, 0, 0.1);
+  border-radius: 14px;
+}
+
+.suggest-card textarea {
+  resize: vertical;
+}
+
+.suggest-card select:focus,
+.suggest-card textarea:focus,
+.suggest-card input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* The bot trap must be invisible to people */
+.trap {
+  position: absolute;
+  left: -9999px;
+}
+
+.suggest-card .new-quote {
+  display: block;
+  margin: 1.5rem auto 0;
+}
+
+.form-status {
+  margin-top: 1rem;
+  text-align: center;
+  min-height: 1.4rem;
+}
+
+.form-note {
+  margin-top: 1.5rem;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  opacity: 0.7;
+}
+
+.form-note a {
+  color: var(--text);
+}

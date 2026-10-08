@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoodSpace · Share an idea</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="home">
+
+  <div class="blob blob1"></div>
+  <div class="blob blob2"></div>
+  <div class="blob blob3"></div>
+
+  <a class="back-link" href="index.html">← Back to MoodSpace</a>
+
+  <div class="stage">
+    <main class="mood-card suggest-card">
+      <div class="mood-emoji">💡</div>
+      <h2>Help make MoodSpace better</h2>
+      <p class="suggest-intro">
+        Got an idea, a quote you love, or a mood we should add? Tell us. We read every message.
+      </p>
+
+      <form id="suggest-form">
+        <label for="type">What would you like to share?</label>
+        <select id="type" name="type">
+          <option>A mood to add</option>
+          <option>A quote I love</option>
+          <option>Something that felt off</option>
+          <option>An idea to improve it</option>
+          <option>Something else</option>
+        </select>
+
+        <label for="message">Your message</label>
+        <textarea id="message" name="message" rows="5" maxlength="1000" required
+          placeholder="e.g. I'd love a 'Lonely' mood with soft fireflies..."></textarea>
+
+        <label for="email">Email <span class="optional">(optional, only if you'd like a reply)</span></label>
+        <input id="email" name="email" type="email" placeholder="you@example.com">
+
+        <!-- Hidden trap for spam bots. Real people never see or tick it. -->
+        <input type="checkbox" name="botcheck" class="trap" tabindex="-1" autocomplete="off">
+
+        <button type="submit" class="new-quote" id="send-btn">Send 💌</button>
+        <p id="form-status" class="form-status" role="status"></p>
+      </form>
+
+      <p class="form-note">
+        Please don't share personal or private details here. This form is only for ideas about the site,
+        and we can't offer support or reply quickly. Your message is sent to the site owner by email.
+        If you're having a hard time, please reach out to someone you trust. In Bangladesh,
+        Kaan Pete Roi: <a href="tel:09612119911">09612-119911</a>.
+      </p>
+    </main>
+  </div>
+
+  <script src="suggest.js"></script>
+</body>
+</html>
